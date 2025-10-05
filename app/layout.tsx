@@ -14,6 +14,7 @@ const poppins = Poppins({
 import HireMeBar from "@/components/hire-me-bar"
 import { Nav } from "@/components/nav" // Import the Nav component
 import { PageLoader } from "@/components/page-loader" // Import the PageLoader component
+import { LoaderOverlay } from "@/components/loader-overlay" // Import the LoaderOverlay component
 
 const sora = Sora({
   subsets: ["latin"],
@@ -21,9 +22,9 @@ const sora = Sora({
 })
 
 export const metadata: Metadata = {
-  title: "v0 App",
-  description: "Created with v0",
-  generator: "v0.app",
+  title: "Gaurav Chhetri",
+  description: "Gaurav Chhetri's personal portfolio showcasing projects and experience.",
+  generator: "Next.js",
 }
 
 export default function RootLayout({
@@ -34,6 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`dark ${GeistSans.variable} ${sora.variable} ${poppins.variable} antialiased`}>
       <body className="font-sans">
+        <LoaderOverlay /> {/* Render the LoaderOverlay component */}
         <PageLoader /> {/* Render the PageLoader component */}
         <Nav /> {/* Render the Nav component */}
         <Suspense fallback={null}>{children}</Suspense>

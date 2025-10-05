@@ -12,7 +12,7 @@ import { Github, Play, Globe } from "lucide-react" // Importing icons for links
 type ProjectCardProps = {
   title: string
   description: string
-  href?: string
+  id: string
   tags?: string[]
   imageAlt?: string
   imageUrl?: string
@@ -25,7 +25,7 @@ type ProjectCardProps = {
 export function ProjectCard({
   title,
   description,
-  href,
+  id,
   tags = [],
   imageAlt = "",
   imageUrl = "/project-thumbnail.jpg",
@@ -34,9 +34,9 @@ export function ProjectCard({
   liveUrl,
   playstoreUrl,
 }: ProjectCardProps) {
-  const isExternal = href ? /^https?:\/\//.test(href) : false
-  const Wrapper = href ? Link : "div"
-  const wrapperProps = href ? (isExternal ? { href, target: "_blank", rel: "noreferrer" } : { href }) : {}
+  const projectPageHref = `/projects/${id}`
+  const Wrapper = Link
+  const wrapperProps = { href: projectPageHref }
 
   const ref = useRef<HTMLDivElement>(null)
   const mx = useMotionValue(0.5)

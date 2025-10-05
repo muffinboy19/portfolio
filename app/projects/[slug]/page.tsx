@@ -1,121 +1,132 @@
-import { notFound } from "next/navigation"
-import Image from "next/image"
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
+import { projectsData } from "@/components/projects-data"
 import { Section } from "@/components/section"
-import { Project3DBackground } from "@/components/project-3d-background"
-import { getProject } from "@/components/projects-data"
+import Image from "next/image"
+import Link from "next/link"
+import { Github, Play, Globe } from "lucide-react"
+import { Project3DBackground } from "@/components/project-3d-background" // Import the 3D background component
 
-export default function ProjectPage({ params }: { params: { slug: string } }) {
-  const project = getProject(params.slug)
-  if (!project) return notFound()
+interface ProjectDetailPageProps {
+  params: {
+    slug: string
+  }
+}
+
+export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
+  const project = projectsData.find((p) => p.id === params.slug)
+
+  if (!project) {
+    return (
+      <Section className="min-h-screen flex items-center justify-center">
+        <h1 className="text-3xl font-bold">Project Not Found</h1>
+      </Section>
+    )
+  }
 
   return (
-    <main className="relative min-h-screen">
-      <Project3DBackground />
+    <Section className="space-y-8 py-12 md:py-16">
+      <Project3DBackground /> {/* Add the 3D background component here */}
+      <div className="max-w-4xl mx-auto relative z-10"> {/* Added relative z-10 to ensure content is above background */}
+        <h1 className="text-4xl font-bold mb-4">{project.title}</h1>
+        <p className="text-lg text-muted-foreground mb-8">{project.description}</p>
 
-      <Section className="relative">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/#work">Work</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>{project.title}</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+        {project.image && (
+          <div className="mb-8 rounded-lg overflow-hidden shadow-lg">
+            <Image
+              src={project.image as string}
+              alt={project.title}
+              width={1200}
+              height={675}
+              layout="responsive"
+              className="object-cover"
+            />
+          </div>
+        )}
 
-        <div className="mt-6 grid gap-8 md:grid-cols-5">
-          <div className="md:col-span-3 space-y-4">
-            <h1 className="text-pretty text-3xl font-semibold md:text-4xl">{project.title}</h1>
-            <p className="text-pretty text-muted-foreground">{project.description}</p>
-            <ul className="mt-2 flex flex-wrap gap-2">
-              {project.tags.map((t) => (
+        {project.tags && project.tags.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-2xl font-semibold mb-2">Technologies Used</h2>
+            <ul className="flex flex-wrap gap-2">
+              {project.tags.map((tag) => (
                 <li
-                  key={t}
-                  className="rounded-full border border-border bg-background/60 px-3 py-1 text-xs text-muted-foreground"
+                  key={tag}
+                  className="rounded-full border border-border bg-background/60 backdrop-blur-sm px-3 py-1 text-sm text-foreground"
                 >
-                  {t}
+                  {tag}
                 </li>
               ))}
             </ul>
           </div>
-          <div className="md:col-span-2">
-            {project.heroImage && (
-              <div className="overflow-hidden rounded-lg border border-border bg-card/70">
-                <Image
-                  src={project.heroImage || "/placeholder.svg"}
-                  alt={`${project.title} hero`}
-                  width={1200}
-                  height={800}
-                  className="h-auto w-full object-cover"
-                  priority
-                />
-              </div>
-            )}
-          </div>
-        </div>
+        )}
 
-        <div className="mt-10 grid gap-8 md:grid-cols-3">
-          <div className="md:col-span-2 space-y-6">
-            <h2 className="text-xl font-medium">Overview</h2>
-            <p className="text-muted-foreground">
-              This case study outlines the goals, constraints, and the solution architecture. Replace this copy with
-              your specific narrative—emphasize decisions, tradeoffs, and outcomes with concrete metrics.
-            </p>
-
-            <h3 className="text-lg font-medium">Approach</h3>
-            <p className="text-muted-foreground">
-              Lead with clarity. Summarize your process and highlight where motion, micro‑interactions, and performance
-              made a difference to usability.
-            </p>
-
-            <h3 className="text-lg font-medium">Results</h3>
-            <ul className="list-disc pl-5 text-muted-foreground">
-              <li>Key metric improvement</li>
-              <li>Performance gains or UX wins</li>
-              <li>Business impact or user satisfaction</li>
-            </ul>
-          </div>
-          <aside className="space-y-4">
-            <div className="rounded-lg border border-border bg-card/70 p-4">
-              <h4 className="text-sm font-medium">Project info</h4>
-              <dl className="mt-3 space-y-2 text-sm text-muted-foreground">
-                <div className="flex justify-between gap-3">
-                  <dt>Role</dt>
-                  <dd>Design & Frontend</dd>
-                </div>
-                <div className="flex justify-between gap-3">
-                  <dt>Year</dt>
-                  <dd>{new Date().getFullYear()}</dd>
-                </div>
-                <div className="flex justify-between gap-3">
-                  <dt>Status</dt>
-                  <dd>Concept</dd>
-                </div>
-              </dl>
+        {(project.githubUrl || project.liveUrl || project.playstoreUrl) && (
+          <div className="mb-8">
+            <h2 className="text-2xl font-semibold mb-2">Links</h2>
+            <div className="flex flex-wrap gap-4">
+              {project.githubUrl && (
+                <Link
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 text-lg text-primary hover:underline"
+                >
+                  <Github className="h-5 w-5" />
+                  GitHub
+                </Link>
+              )}
+              {project.liveUrl && (
+                <Link
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 text-lg text-primary hover:underline"
+                >
+                  <Globe className="h-5 w-5" />
+                  Live Demo
+                </Link>
+              )}
+              {project.playstoreUrl && (
+                <Link
+                  href={project.playstoreUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 text-lg text-primary hover:underline"
+                >
+                  <Play className="h-5 w-5" />
+                  Play Store
+                </Link>
+              )}
             </div>
-            <a
-              href="/#contact"
-              className="inline-flex items-center justify-center rounded-md border border-border bg-primary/10 px-3 py-2 text-sm text-primary hover:bg-primary/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              Start a project
-            </a>
-          </aside>
-        </div>
-      </Section>
-    </main>
+          </div>
+        )}
+
+        {project.challenges && project.challenges.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-2xl font-semibold mb-4">Challenges Faced</h2>
+            <div className="space-y-4">
+              {project.challenges.map((challenge, index) => (
+                <div key={index} className="rounded-lg border border-border bg-card/60 p-4">
+                  <h3 className="text-xl font-medium mb-1">{challenge.title}</h3>
+                  <p className="text-muted-foreground">{challenge.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {project.solutions && project.solutions.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-2xl font-semibold mb-4">Solutions Implemented</h2>
+            <div className="space-y-4">
+              {project.solutions.map((solution, index) => (
+                <div key={index} className="rounded-lg border border-border bg-card/60 p-4">
+                  <h3 className="text-xl font-medium mb-1">{solution.title}</h3>
+                  <p className="text-muted-foreground">{solution.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </Section>
   )
 }

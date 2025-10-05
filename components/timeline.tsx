@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils"
+import { experienceData } from "./experience-data" // Import experience data
 
 export type TimelineItem = {
   title: string
@@ -9,11 +10,10 @@ export type TimelineItem = {
 }
 
 type TimelineProps = {
-  items: TimelineItem[]
   className?: string
 }
 
-export function Timeline({ items, className }: TimelineProps) {
+export function Timeline({ className }: TimelineProps) {
   return (
     <div className={cn("w-full", className)}>
       <header className="mb-8">
@@ -26,8 +26,8 @@ export function Timeline({ items, className }: TimelineProps) {
           className="pointer-events-none absolute left-[0.875rem] md:left-4 top-0 bottom-0 w-px bg-border/60"
         />
         <ul className="space-y-8 md:space-y-10">
-          {items.map((item, i) => (
-            <li key={i} className="relative pl-8 md:pl-12 group">
+          {experienceData.map((item, i) => (
+            <li key={item.id} className="relative pl-8 md:pl-12 group">
               <span
                 aria-hidden
                 className="absolute left-2 md:left-3 top-2 size-2 rounded-full bg-primary shadow-[0_0_0_3px] shadow-background"

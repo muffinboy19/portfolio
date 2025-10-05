@@ -15,39 +15,12 @@ export default function Home() {
       <Hero />
       <Projects />
       <Section id="experience" className="relative">
-        <Timeline
-          items={[
-            {
-              title: "Backend Developer",
-              subtitle: "APIs, services, performance",
-              period: "2023 — Present",
-              description:
-                "Designing and building secure, high‑performance services. Focus on clean architecture, observability, and scalability.",
-              tags: ["Node.js", "Postgres", "Prisma", "REST", "GraphQL"],
-            },
-            {
-              title: "Android Developer",
-              subtitle: "Apps & UI experiences",
-              period: "2022 — 2023",
-              description:
-                "Shipped Android apps with modern tooling. Crafted responsive UI and smooth interactions with attention to detail.",
-              tags: ["Kotlin", "Jetpack", "Compose", "Material"],
-            },
-            {
-              title: "Problem Solver",
-              subtitle: "Algorithms & systems",
-              period: "2019 — Present",
-              description:
-                "Solve complex problems with a pragmatic mindset—optimize bottlenecks, simplify systems, and iterate quickly.",
-              tags: ["DSA", "Performance", "Systems"],
-            },
-          ]}
-        />
+        <Timeline />
       </Section>
       <About />
       <Contact />
       <footer className="border-t border-border py-8 text-center text-sm text-muted-foreground">
-        <p className="text-pretty">© {new Date().getFullYear()} Gaurav. All rights reserved.</p>
+        <p className="text-pretty">Made with ❤️</p>
       </footer>
     </main>
   )

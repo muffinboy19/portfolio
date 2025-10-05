@@ -24,7 +24,7 @@ export function RoleRotator({
 
   return (
     // use a span so this component can be placed inline (inside headings/paragraphs)
-    <span className="relative inline-block h-6 md:h-7 overflow-hidden text-lg md:text-xl" aria-live="polite">
+    <span className="relative inline-block h-8 md:h-9 overflow-hidden text-xl md:text-2xl lg:text-3xl font-bold" aria-live="polite">
       <AnimatePresence mode="wait" initial={false}>
         <motion.span
           key={role}
@@ -33,7 +33,7 @@ export function RoleRotator({
           exit={{ y: -16, opacity: 0 }}
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
           // make the animated element a block so vertical movement is clipped by the wrapper
-          className="block bg-gradient-to-r from-[color:var(--brand-1)] to-[color:var(--brand-2)] bg-clip-text text-transparent"
+          className="block bg-gradient-to-r from-[color:var(--brand-1)] to-[color:var(--brand-2)] bg-clip-text text-transparent drop-shadow-sm"
         >
           {role}
         </motion.span>

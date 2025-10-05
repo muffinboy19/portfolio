@@ -3,6 +3,16 @@
 import Link from "next/link"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
 
 const links = [
   { href: "/work", label: "Work" },
@@ -18,7 +28,7 @@ export function Nav() {
       <div className="mx-auto relative flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-4">
         <Link href="/" className="font-mono text-sm text-muted-foreground hover:text-foreground">
           <span className="bg-gradient-to-r from-[color:var(--brand-1)] to-[color:var(--brand-2)] bg-clip-text text-transparent">
-            gaurav.dev
+            Gaurav Chhetri
           </span>
           <span className="sr-only">Home</span>
         </Link>
@@ -44,12 +54,42 @@ export function Nav() {
               </li>
             ))}
             <li>
-              <a
-                href="mailto:gauravchhetri6363@gmail.com"
-                className="inline-block rounded-md border border-border px-3 py-1.5 text-foreground hover:text-primary transition"
-              >
-                Hire me
-              </a>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="secondary" className="inline-block rounded-md border border-border px-3 py-1.5 text-foreground hover:text-primary transition">
+                    Hire me
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="bg-background/10 backdrop-blur-3xl shadow-lg border border-border/50">
+                  <DialogHeader>
+                    <DialogTitle>Contact Gaurav Chhetri</DialogTitle>
+                    <DialogDescription>
+                      I'm always open to new opportunities and collaborations. Feel free to reach out!
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <p className="text-right text-muted-foreground">Email:</p>
+                      <p className="col-span-3">gaurav.chhetri@example.com</p> {/* Replace with actual email */}
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <p className="text-right text-muted-foreground">LinkedIn:</p>
+                      <a href="https://www.linkedin.com/in/gauravchhetri" target="_blank" rel="noopener noreferrer" className="col-span-3 text-blue-400 hover:underline">
+                        linkedin.com/in/gauravchhetri
+                      </a>
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <p className="text-right text-muted-foreground">GitHub:</p>
+                      <a href="https://github.com/muffinboy19" target="_blank" rel="noopener noreferrer" className="col-span-3 text-blue-400 hover:underline">
+                        github.com/muffinboy19
+                      </a>
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button onClick={() => window.open('mailto:gaurav.chhetri@example.com', '_blank')}>Send Email</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </li>
           </ul>
         </nav>
@@ -69,13 +109,46 @@ export function Nav() {
                 </li>
               ))}
               <li className="pt-1 border-t border-border">
-                <a
-                  href="mailto:gauravchhetri6363@gmail.com"
-                  onClick={() => setOpen(false)}
-                  className="block rounded-md border border-border px-3 py-1.5 text-center text-foreground hover:text-primary"
-                >
-                  Hire me
-                </a>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="secondary"
+                      onClick={() => setOpen(false)}
+                      className="block rounded-md border border-border px-3 py-1.5 text-center text-foreground hover:text-primary"
+                    >
+                      Hire me
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="bg-background/10 backdrop-blur-3xl shadow-lg border border-border/50">
+                    <DialogHeader>
+                      <DialogTitle>Contact Gaurav Chhetri</DialogTitle>
+                      <DialogDescription>
+                        I'm always open to new opportunities and collaborations. Feel free to reach out!
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                      <div className="grid grid-cols-4 items-center gap-4">
+                        <p className="text-right text-muted-foreground">Email:</p>
+                        <p className="col-span-3">gaurav.chhetri@example.com</p> {/* Replace with actual email */}
+                      </div>
+                      <div className="grid grid-cols-4 items-center gap-4">
+                        <p className="text-right text-muted-foreground">LinkedIn:</p>
+                        <a href="https://www.linkedin.com/in/gauravchhetri" target="_blank" rel="noopener noreferrer" className="col-span-3 text-blue-400 hover:underline">
+                          linkedin.com/in/gauravchhetri
+                        </a>
+                      </div>
+                      <div className="grid grid-cols-4 items-center gap-4">
+                        <p className="text-right text-muted-foreground">GitHub:</p>
+                        <a href="https://github.com/muffinboy19" target="_blank" rel="noopener noreferrer" className="col-span-3 text-blue-400 hover:underline">
+                          github.com/muffinboy19
+                        </a>
+                      </div>
+                    </div>
+                    <DialogFooter>
+                      <Button onClick={() => window.open('mailto:gaurav.chhetri@example.com', '_blank')}>Send Email</Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
               </li>
             </ul>
           </div>
