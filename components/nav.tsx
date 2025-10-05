@@ -24,7 +24,7 @@ export function Nav() {
   const [open, setOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border backdrop-blur supports-[backdrop-filter]:bg-background/70">
+    <header className="sticky top-0 z-50 border-b border-border bg-background">
       <div className="mx-auto relative flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-4">
         <Link href="/" className="font-mono text-sm text-muted-foreground hover:text-foreground">
           <span className="bg-gradient-to-r from-[color:var(--brand-1)] to-[color:var(--brand-2)] bg-clip-text text-transparent">
@@ -74,8 +74,8 @@ export function Nav() {
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                       <p className="text-right text-muted-foreground">LinkedIn:</p>
-                      <a href="https://www.linkedin.com/in/gauravchhetri" target="_blank" rel="noopener noreferrer" className="col-span-3 text-blue-400 hover:underline">
-                        linkedin.com/in/gauravchhetri
+                      <a href="https://www.linkedin.com/in/gaurav-chhetri-a9a254250/" target="_blank" rel="noopener noreferrer" className="col-span-3 text-blue-400 hover:underline">
+                        https://www.linkedin.com/in/gaurav-chhetri-a9a254250/
                       </a>
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
@@ -133,7 +133,7 @@ export function Nav() {
                       </div>
                       <div className="grid grid-cols-4 items-center gap-4">
                         <p className="text-right text-muted-foreground">LinkedIn:</p>
-                        <a href="https://www.linkedin.com/in/gauravchhetri" target="_blank" rel="noopener noreferrer" className="col-span-3 text-blue-400 hover:underline">
+                        <a href="https://www.linkedin.com/in/gaurav-chhetri-a9a254250/" target="_blank" rel="noopener noreferrer" className="col-span-3 text-blue-400 hover:underline">
                           linkedin.com/in/gauravchhetri
                         </a>
                       </div>

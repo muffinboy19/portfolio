@@ -1,9 +1,9 @@
 "use client"
 
-import type React from "react"
 
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion"
 import Link from "next/link"
+import { useRouter } from "next/navigation" // Import useRouter
 import { cn } from "@/lib/utils"
 import { useRef } from "react"
 
@@ -35,8 +35,7 @@ export function ProjectCard({
   playstoreUrl,
 }: ProjectCardProps) {
   const projectPageHref = `/projects/${id}`
-  const Wrapper = Link
-  const wrapperProps = { href: projectPageHref }
+  const router = useRouter() // Initialize useRouter
 
   const ref = useRef<HTMLDivElement>(null)
   const mx = useMotionValue(0.5)
@@ -58,6 +57,14 @@ export function ProjectCard({
     my.set(0.5)
   }
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Prevent navigation if an inner link was clicked
+    if ((e.target as HTMLElement).closest("a")) {
+      return
+    }
+    router.push(projectPageHref)
+  }
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 8 }}
@@ -73,6 +80,7 @@ export function ProjectCard({
       )}
       onPointerMove={onPointerMove}
       onPointerLeave={onLeave}
+      onClick={handleCardClick} // Add onClick handler for the entire card
       ref={ref}
     >
       {/* purple glow on hover */}
@@ -89,79 +97,75 @@ export function ProjectCard({
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 translate-x-[-120%] rotate-6 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 transition duration-500 group-hover:translate-x-[120%] group-hover:opacity-100"
       />
-      <Wrapper
-        {...(wrapperProps as any)}
-        className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md"
+      {/* Removed Wrapper (Link) here */}
+      <motion.div
+        style={{ rotateX: rx, rotateY: ry, transformStyle: "preserve-3d" }}
+        className="will-change-transform"
       >
-        <motion.div
-          style={{ rotateX: rx, rotateY: ry, transformStyle: "preserve-3d" }}
-          className="will-change-transform"
-        >
-          <div className="overflow-hidden rounded-md">
-            <img
-              src={imageUrl || "/placeholder.svg?height=400&width=640&query=project%20thumbnail"}
-              alt={imageAlt}
-              className="aspect-[16/10] w-full scale-100 transform rounded-md object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-            />
-          </div>
-          <div className="mt-3 space-y-2">
-            <h3 className="text-lg font-medium">{title}</h3>
-            <p className="text-sm text-muted-foreground">{description}</p>
-            {tags.length > 0 && (
-              <ul className="mt-1 flex flex-wrap gap-2">
-                {tags.map((t) => (
-                  <li
-                    key={t}
-                    className="rounded-full border border-border bg-background/60 backdrop-blur-sm px-2 py-1 text-xs text-foreground transition-all duration-300 hover:scale-105"
-                  >
-                    {t}
-                  </li>
-                ))}
-              </ul>
-            )}
-            {(githubUrl || liveUrl || playstoreUrl) && (
-              <div className="mt-3 flex flex-wrap gap-3">
-                {githubUrl && (
-                  <Link
-                    href={githubUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"
-                    aria-label="GitHub repository"
-                  >
-                    <Github className="h-4 w-4" />
-                    GitHub
-                  </Link>
-                )}
-                {liveUrl && (
-                  <Link
-                    href={liveUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"
-                    aria-label="Live demo"
-                  >
-                    <Globe className="h-4 w-4" />
-                    Live Demo
-                  </Link>
-                )}
-                {playstoreUrl && (
-                  <Link
-                    href={playstoreUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"
-                    aria-label="Play Store link"
-                  >
-                    <Play className="h-4 w-4" />
-                    Play Store
-                  </Link>
-                )}
-              </div>
-            )}
-          </div>
-        </motion.div>
-      </Wrapper>
+        <div className="overflow-hidden rounded-md">
+          <img
+            src={imageUrl || "/placeholder.svg?height=400&width=640&query=project%20thumbnail"}
+            alt={imageAlt}
+            className="aspect-[16/10] w-full scale-100 transform rounded-md object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+          />
+        </div>
+        <div className="mt-3 space-y-2">
+          <h3 className="text-lg font-medium">{title}</h3>
+          <p className="text-sm text-muted-foreground">{description}</p>
+          {tags.length > 0 && (
+            <ul className="mt-1 flex flex-wrap gap-2">
+              {tags.map((t) => (
+                <li
+                  key={t}
+                  className="rounded-full border border-border bg-background/60 backdrop-blur-sm px-2 py-1 text-xs text-foreground transition-all duration-300 hover:scale-105"
+                >
+                  {t}
+                </li>
+              ))}
+            </ul>
+          )}
+          {(githubUrl || liveUrl || playstoreUrl) && (
+            <div className="mt-3 flex flex-wrap gap-3">
+              {githubUrl && (
+                <Link
+                  href={githubUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"
+                  aria-label="GitHub repository"
+                >
+                  <Github className="h-4 w-4" />
+                  GitHub
+                </Link>
+              )}
+              {liveUrl && (
+                <Link
+                  href={liveUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"
+                  aria-label="Live demo"
+                >
+                  <Globe className="h-4 w-4" />
+                  Live Demo
+                </Link>
+              )}
+              {playstoreUrl && (
+                <Link
+                  href={playstoreUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"
+                  aria-label="Play Store link"
+                >
+                  <Play className="h-4 w-4" />
+                  Play Store
+                </Link>
+              )}
+            </div>
+          )}
+        </div>
+      </motion.div>
     </motion.article>
   )
 }

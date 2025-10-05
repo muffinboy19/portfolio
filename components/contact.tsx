@@ -37,13 +37,13 @@ export function Contact() {
           <p className="text-sm text-muted-foreground">Social</p>
           <ul className="mt-1 flex flex-wrap gap-3 text-lg">
             <li>
-              <Link href="https://www.linkedin.com/in/yourprofile" className="inline-flex items-center gap-2 hover:text-primary" aria-label="LinkedIn profile"> {/* Replace with your LinkedIn profile URL */}
+              <Link href="https://www.linkedin.com/in/gaurav-chhetri-a9a254250/" className="inline-flex items-center gap-2 hover:text-primary" aria-label="LinkedIn profile"> {/* Replace with your LinkedIn profile URL */}
                 <Linkedin className="h-6 w-6" />
                 LinkedIn
               </Link>
             </li>
             <li>
-              <Link href="https://github.com/yourprofile" className="inline-flex items-center gap-2 hover:text-primary" aria-label="GitHub profile"> {/* Replace with your GitHub profile URL */}
+              <Link href="https://github.com/your-github-profile" className="inline-flex items-center gap-2 hover:text-primary" aria-label="GitHub profile"> {/* Replace with your GitHub profile URL */}
                 <Github className="h-6 w-6" />
                 GitHub
               </Link>

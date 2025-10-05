@@ -42,7 +42,7 @@ export default function HireMeBar() {
           </Link>
           <span className="hidden md:inline text-muted-foreground">•</span>
           <Link
-            href="https://github.com/muffinboy19/"
+            href="https://github.com/your-github-profile/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm underline underline-offset-4 hover:text-primary"

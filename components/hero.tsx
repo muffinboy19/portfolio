@@ -53,7 +53,7 @@ export function Hero() {
                   Contact
                 </Button>
               </DialogTrigger>
-              <DialogContent className="bg-background/0 backdrop-blur-4xl shadow-lg border border-border/50">
+              <DialogContent className="bg-background shadow-lg border border-border/50">
                 <DialogHeader>
                   <DialogTitle>Contact Gaurav Chhetri</DialogTitle>
                   <DialogDescription>

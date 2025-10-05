@@ -3,8 +3,6 @@ import { Section } from "@/components/section"
 import Image from "next/image"
 import Link from "next/link"
 import { Github, Play, Globe } from "lucide-react"
-import { Project3DBackground } from "@/components/project-3d-background" // Import the 3D background component
-
 interface ProjectDetailPageProps {
   params: {
     slug: string
@@ -24,7 +22,6 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
 
   return (
     <Section className="space-y-8 py-12 md:py-16">
-      <Project3DBackground /> {/* Add the 3D background component here */}
       <div className="max-w-4xl mx-auto relative z-10"> {/* Added relative z-10 to ensure content is above background */}
         <h1 className="text-4xl font-bold mb-4">{project.title}</h1>
         <p className="text-lg text-muted-foreground mb-8">{project.description}</p>
@@ -34,8 +31,8 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
             <Image
               src={project.image as string}
               alt={project.title}
-              width={1200}
-              height={675}
+              width={1000}
+              height={562}
               layout="responsive"
               className="object-cover"
             />
