@@ -112,11 +112,8 @@ export default function FlappyBirdGame() {
     const ctx = canvas?.getContext("2d")
 
     if (!ctx || !canvas) {
-      console.error("Could not get 2D context for canvas or canvas is null.")
       return
     }
-
-    console.log("Canvas context obtained. Setting up drawing loop.")
 
     // Function to draw the current state of the game
     const drawGame = (currentBirdY: number, currentPipes: Point[]) => {
@@ -124,8 +121,7 @@ export default function FlappyBirdGame() {
       ctx.fillStyle = "var(--background)"
       ctx.fillRect(0, 0, COLS * CELL, ROWS * CELL)
 
-      // Draw bird as a triangle
-      // Draw bird as a simple circle
+      // Draw bird as a simple circle with a beak
       ctx.fillStyle = "var(--primary)" // Bird color
       ctx.beginPath()
       ctx.arc(COLS * CELL / 4 + BIRD_SIZE / 2, currentBirdY + BIRD_SIZE / 2, BIRD_SIZE / 2, 0, Math.PI * 2)
@@ -146,11 +142,9 @@ export default function FlappyBirdGame() {
 
     // Initial draw to ensure something is visible immediately
     drawGame(birdY, pipes)
-    console.log("Initial draw performed with birdY:", birdY, "pipes:", pipes)
 
     const animate = () => {
       if (gameOver || won) {
-        console.log("Game Over or Won, stopping animation frame.")
         return
       }
 
@@ -164,14 +158,12 @@ export default function FlappyBirdGame() {
           birdY + BIRD_SIZE > p.y
         ) {
           setGameOver(true)
-          console.log("Collision detected! Game Over.")
           return
         }
       }
 
       // Drawing
       drawGame(birdY, pipes) // Draw with the latest state
-      console.log("Drawing frame with birdY:", birdY, "pipes:", pipes)
 
       requestAnimationFrame(animate)
     }
@@ -179,7 +171,6 @@ export default function FlappyBirdGame() {
     const animationFrameId = requestAnimationFrame(animate)
 
     return () => {
-      console.log("Cleaning up animation frame.")
       cancelAnimationFrame(animationFrameId)
     }
   }, [birdY, pipes, gameOver, won, gameStarted]) // Redraw when birdY or pipes change
