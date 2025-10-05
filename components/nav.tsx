@@ -60,7 +60,7 @@ export function Nav() {
                     Hire me
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="bg-background/0 backdrop-blur-3xl shadow-lg border border-border/50">
+                <DialogContent className="bg-transparent backdrop-blur-2xl shadow-lg border border-border/50">
                   <DialogHeader>
                     <DialogTitle>Contact Gaurav Chhetri</DialogTitle>
                     <DialogDescription>
@@ -119,7 +119,7 @@ export function Nav() {
                       Hire me
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="bg-background/0 backdrop-blur-3xl shadow-lg border border-border/50">
+                  <DialogContent className="bg-transparent backdrop-blur-2xl shadow-lg border border-border/50">
                     <DialogHeader>
                       <DialogTitle>Contact Gaurav Chhetri</DialogTitle>
                       <DialogDescription>

@@ -2,11 +2,6 @@
 
 import dynamic from "next/dynamic"
 
-export const metadata = {
-  title: "Play Flappy Bird | Gaurav",
-  description: "Survive for 10 seconds — then you have to hire me.",
-}
-
 const DynamicFlappyBirdGame = dynamic(() => import("@/components/flappy-bird-game"), {
   ssr: false, // Ensure it's client-side rendered
   loading: () => <p>Loading game...</p>, // Optional: Add a loading indicator
