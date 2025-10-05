@@ -25,7 +25,7 @@ export function Hero() {
         className="relative grid gap-8 md:grid-cols-2"
       >
         <div className="space-y-6">
-          <h1 className="font-serif text-6xl font-extrabold md:text-7xl lg:text-8xl leading-normal">
+          <h1 className="font-serif text-6xl font-extrabold md:text-7xl lg:text-8xl pb-2">
             {"Hi, I'm "}
             <span className="bg-gradient-to-r from-[color:var(--brand-1)] to-[color:var(--brand-2)] bg-clip-text text-transparent">
               Gaurav
@@ -53,7 +53,7 @@ export function Hero() {
                   Contact
                 </Button>
               </DialogTrigger>
-              <DialogContent className="bg-background/10 backdrop-blur-3xl shadow-lg border border-border/50">
+              <DialogContent className="bg-transparent backdrop-blur-2xl shadow-lg border border-border/50">
                 <DialogHeader>
                   <DialogTitle>Contact Gaurav Chhetri</DialogTitle>
                   <DialogDescription>
