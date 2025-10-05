@@ -27,7 +27,7 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
         <p className="text-lg text-muted-foreground mb-8">{project.description}</p>
 
         {project.image && (
-          <div className="mb-8 rounded-lg overflow-hidden shadow-lg">
+          <div className="mb-8 rounded-lg overflow-hidden shadow-lg max-w-2xl mx-auto"> {/* Reduced image size and centered */}
             <Image
               src={project.image as string}
               alt={project.title}
