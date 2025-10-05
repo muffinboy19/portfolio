@@ -63,7 +63,7 @@ export function Hero() {
                 <div className="grid gap-4 py-4">
                   <div className="grid grid-cols-4 items-center gap-4">
                     <p className="text-right text-muted-foreground">Email:</p>
-                    <p className="col-span-3">gaurav.chhetri@example.com</p> {/* Replace with actual email */}
+                    <p className="col-span-3">gauravchhetri6363@gmail.com</p> {/* Replace with actual email */}
                   </div>
                   <div className="grid grid-cols-4 items-center gap-4">
                     <p className="text-right text-muted-foreground">LinkedIn:</p>
@@ -79,7 +79,7 @@ export function Hero() {
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button onClick={() => window.open('mailto:gaurav.chhetri@example.com', '_blank')}>Send Email</Button>
+                  <Button onClick={() => window.open('mailto:gauravchhetri6363@gmail.com', '_blank')}>Send Email</Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
