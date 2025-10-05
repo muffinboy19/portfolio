@@ -22,7 +22,6 @@ export function Hero() {
             <span className="bg-gradient-to-r from-[color:var(--brand-1)] to-[color:var(--brand-2)] bg-clip-text text-transparent">
               Gaurav
             </span>
-            {"."}
           </h1>
           <p className="text-pretty text-muted-foreground md:text-lg">
             <span className="sr-only">Roles:</span>

@@ -3,18 +3,28 @@
 import { useEffect, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 
-export function RoleRotator({ roles, interval = 1800 }: { roles: string[]; interval?: number }) {
+export function RoleRotator({
+  roles,
+  interval = 1800,
+}: {
+  roles: string[]
+  interval?: number
+}) {
   const [index, setIndex] = useState(0)
 
   useEffect(() => {
+    if (!roles || roles.length === 0) return
     const id = setInterval(() => setIndex((i) => (i + 1) % roles.length), interval)
     return () => clearInterval(id)
-  }, [roles.length, interval])
+  }, [roles, interval])
+
+  if (!roles || roles.length === 0) return null
 
   const role = roles[index]
 
   return (
-    <div className="relative h-6 md:h-7 overflow-y-hidden">
+    // use a span so this component can be placed inline (inside headings/paragraphs)
+    <span className="relative inline-block h-6 md:h-7 overflow-hidden text-lg md:text-xl" aria-live="polite">
       <AnimatePresence mode="wait" initial={false}>
         <motion.span
           key={role}
@@ -22,11 +32,12 @@ export function RoleRotator({ roles, interval = 1800 }: { roles: string[]; inter
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -16, opacity: 0 }}
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="inline-block bg-gradient-to-r from-[color:var(--brand-1)] to-[color:var(--brand-2)] bg-clip-text text-transparent"
+          // make the animated element a block so vertical movement is clipped by the wrapper
+          className="block bg-gradient-to-r from-[color:var(--brand-1)] to-[color:var(--brand-2)] bg-clip-text text-transparent"
         >
           {role}
         </motion.span>
       </AnimatePresence>
-    </div>
+    </span>
   )
 }

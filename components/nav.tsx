@@ -16,7 +16,7 @@ export function Nav() {
   return (
     <header className="sticky top-0 z-50 border-b border-border backdrop-blur supports-[backdrop-filter]:bg-background/70">
       <div className="mx-auto relative flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-4">
-        <Link href="#top" className="font-mono text-sm text-muted-foreground hover:text-foreground">
+        <Link href="/" className="font-mono text-sm text-muted-foreground hover:text-foreground">
           <span className="bg-gradient-to-r from-[color:var(--brand-1)] to-[color:var(--brand-2)] bg-clip-text text-transparent">
             gaurav.dev
           </span>

@@ -52,7 +52,7 @@ export function Timeline({ items, className }: TimelineProps) {
                     {item.tags.map((t, idx) => (
                       <span
                         key={idx}
-                        className="rounded-full border border-border/60 bg-background/60 px-2.5 py-1 text-xs text-muted-foreground transition-colors group-hover:border-primary/40"
+                        className="rounded-full border border-border bg-background/60 backdrop-blur-sm px-2.5 py-1 text-xs text-foreground transition-all duration-300 hover:scale-105"
                       >
                         {t}
                       </span>

@@ -1,4 +1,3 @@
-import { Nav } from "@/components/nav"
 import { Hero } from "@/components/hero"
 import { Projects } from "@/components/projects"
 import { About } from "@/components/about"
@@ -13,7 +12,6 @@ export default function Home() {
     <main className="divide-y divide-border">
       <LoaderOverlay /> {/* first-visit loading animation */}
       <DynamicBackground /> {/* interactive aurora follows the cursor across the page */}
-      <Nav />
       <Hero />
       <Projects />
       <Section id="experience" className="relative">

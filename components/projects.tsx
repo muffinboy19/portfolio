@@ -1,5 +1,6 @@
 import { Section } from "./section"
 import { ProjectCard } from "./project-card"
+import { projectsData } from "./projects-data"
 
 export function Projects() {
   return (
@@ -19,29 +20,20 @@ export function Projects() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <ProjectCard
-          title="Dashboard experience"
-          description="Design system-driven analytics dashboard focused on clarity and motion."
-          tags={["Next.js", "TypeScript", "Design System"]}
-          imageAlt="Analytics dashboard thumbnail"
-          href="/projects/dashboard-experience"
-        />
-        <ProjectCard
-          title="E‑commerce concept"
-          description="Elegant product exploration with fast filtering and frictionless checkout."
-          tags={["Shop", "Performance"]}
-          imageAlt="Storefront thumbnail"
-          imageUrl="/minimal-ecommerce-mock.jpg"
-          href="/projects/ecommerce-concept"
-        />
-        <ProjectCard
-          title="Interactive case study"
-          description="Narrative case study with scrollytelling and subtle parallax."
-          tags={["Story", "Framer Motion"]}
-          imageAlt="Case study thumbnail"
-          imageUrl="/case-study-hero.jpg"
-          href="/projects/interactive-case-study"
-        />
+        {projectsData.map((project) => (
+          <ProjectCard
+            key={project.id}
+            title={project.title}
+            description={project.description}
+            tags={project.tags}
+            imageAlt={project.title + " thumbnail"}
+            imageUrl={project.image as string}
+            href={`/projects/${project.id}`} {/* Link to the individual project page */}
+            githubUrl={project.githubUrl}
+            liveUrl={project.liveUrl}
+            playstoreUrl={project.playstoreUrl}
+          />
+        ))}
       </div>
     </Section>
   )

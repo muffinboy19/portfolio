@@ -7,6 +7,8 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { useRef } from "react"
 
+import { Github, Play, Globe } from "lucide-react" // Importing icons for links
+
 type ProjectCardProps = {
   title: string
   description: string
@@ -15,6 +17,9 @@ type ProjectCardProps = {
   imageAlt?: string
   imageUrl?: string
   className?: string
+  githubUrl?: string
+  liveUrl?: string
+  playstoreUrl?: string
 }
 
 export function ProjectCard({
@@ -25,6 +30,9 @@ export function ProjectCard({
   imageAlt = "",
   imageUrl = "/project-thumbnail.jpg",
   className,
+  githubUrl,
+  liveUrl,
+  playstoreUrl,
 }: ProjectCardProps) {
   const isExternal = href ? /^https?:\/\//.test(href) : false
   const Wrapper = href ? Link : "div"
@@ -104,12 +112,52 @@ export function ProjectCard({
                 {tags.map((t) => (
                   <li
                     key={t}
-                    className="rounded-full border border-border bg-background/60 px-2 py-1 text-xs text-muted-foreground"
+                    className="rounded-full border border-border bg-background/60 backdrop-blur-sm px-2 py-1 text-xs text-foreground transition-all duration-300 hover:scale-105"
                   >
                     {t}
                   </li>
                 ))}
               </ul>
+            )}
+            {(githubUrl || liveUrl || playstoreUrl) && (
+              <div className="mt-3 flex flex-wrap gap-3">
+                {githubUrl && (
+                  <Link
+                    href={githubUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"
+                    aria-label="GitHub repository"
+                  >
+                    <Github className="h-4 w-4" />
+                    GitHub
+                  </Link>
+                )}
+                {liveUrl && (
+                  <Link
+                    href={liveUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"
+                    aria-label="Live demo"
+                  >
+                    <Globe className="h-4 w-4" />
+                    Live Demo
+                  </Link>
+                )}
+                {playstoreUrl && (
+                  <Link
+                    href={playstoreUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"
+                    aria-label="Play Store link"
+                  >
+                    <Play className="h-4 w-4" />
+                    Play Store
+                  </Link>
+                )}
+              </div>
             )}
           </div>
         </motion.div>
