@@ -12,6 +12,14 @@ interface Experience {
 export const experienceData: Experience[] = [
   {
     "id": "exp-1",
+    "title": "Software Developer Intern (Backend)",
+    "subtitle": "DealShare",
+    "period": "Jan 2026 – Jun 2026",
+    "description": "• Engineered Spring Boot microservices for warehouse inventory and goods movement, covering hub-to-spoke transfers, returns, damages, and inward operations.\n• Implemented cycle-counting and reconciliation workflows that strengthened stock accuracy across nationwide warehouse operations.\n• Optimized SQL query paths for inventory-heavy endpoints, reducing response latency and improving near real-time stock visibility.\n• Contributed to production-critical workflows with a strong focus on delivery quality and ownership.",
+    "tags": ["Spring Boot", "Microservices", "SQL", "Inventory Systems"]
+  },
+  {
+    "id": "exp-2",
     "title": "Software Developer Intern",
     "subtitle": "GleoAI",
     "period": "May 2025 – Jul 2025",
@@ -19,7 +27,7 @@ export const experienceData: Experience[] = [
     "tags": ["Kotlin", "Android", "Coroutines", "Coil"]
   },
   {
-    "id": "exp-2",
+    "id": "exp-3",
     "title": "App Developer Intern",
     "subtitle": "CehPoint",
     "period": "Nov 2023 – Feb 2024",
@@ -27,7 +35,7 @@ export const experienceData: Experience[] = [
     "tags": ["Kotlin", "MVVM", "SQL", "API Design"]
   },
   {
-    "id": "exp-3",
+    "id": "exp-4",
     "title": "Mentor",
     "subtitle": "OpenCode",
     "period": "Dec 2023 – Jan 2024",
@@ -35,7 +43,7 @@ export const experienceData: Experience[] = [
     "tags": ["Open Source", "Git", "CI/CD", "Mentorship"]
   },
   {
-    "id": "exp-4",
+    "id": "exp-5",
     "title": "App Wing Coordinator",
     "subtitle": "GeekHaven, IIIT Allahabad",
     "period": "2024 – Present",
