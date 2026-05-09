@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
 
-type Pipe = { x: number; y: number; width: number; height: number }
+type Pipe = { x: number; y: number; width: number; height: number; scored?: boolean }
+type GameStatus = "ready" | "playing" | "won" | "lost"
 
 const COLS = 24
 const CELL = 16
@@ -11,13 +12,14 @@ const WIDTH = COLS * CELL
 const HEIGHT = COLS * CELL
 const WIN_SECONDS = 12
 
-const GRAVITY = 0.42
-const JUMP_STRENGTH = -6.8
+const GRAVITY = 0.32
+const JUMP_STRENGTH = -6.15
 const PIPE_WIDTH = 34
 const PIPE_GAP = 118
-const PIPE_SPEED = 2.35
+const PIPE_SPEED = 2.12
 const BIRD_SIZE = CELL
 const BIRD_X = WIDTH * 0.22
+const BIRD_SCORE_X = BIRD_X + BIRD_SIZE / 2
 const PIPE_SPAWN_MARGIN = 200
 
 function readThemeColors() {
@@ -65,30 +67,51 @@ function withAlpha(cssColor: string, alpha: number): string {
 
 export default function FlappyBirdGame() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
-  const statusRef = useRef<"playing" | "won" | "lost">("playing")
+  const statusRef = useRef<GameStatus>("ready")
   const startTimeRef = useRef(0)
+  const lastElapsedSecRef = useRef(-1)
   const simRef = useRef({
     birdY: HEIGHT / 2 - BIRD_SIZE / 2,
     velocity: 0,
     pipes: [] as Pipe[],
+    score: 0,
   })
 
   const [outcome, setOutcome] = useState<"won" | "lost" | null>(null)
   const [elapsed, setElapsed] = useState(0)
+  const [score, setScore] = useState(0)
+  const [awaitingFirstTap, setAwaitingFirstTap] = useState(true)
 
   const reset = useCallback(() => {
     simRef.current = {
       birdY: HEIGHT / 2 - BIRD_SIZE / 2,
       velocity: 0,
       pipes: [],
+      score: 0,
     }
-    statusRef.current = "playing"
-    startTimeRef.current = performance.now()
+    statusRef.current = "ready"
+    startTimeRef.current = 0
+    lastElapsedSecRef.current = -1
     setOutcome(null)
     setElapsed(0)
+    setScore(0)
+    setAwaitingFirstTap(true)
   }, [])
 
   const jump = useCallback(() => {
+    const st = statusRef.current
+    if (st === "won" || st === "lost") return
+
+    if (st === "ready") {
+      statusRef.current = "playing"
+      startTimeRef.current = performance.now()
+      lastElapsedSecRef.current = -1
+      setElapsed(0)
+      simRef.current.score = 0
+      setScore(0)
+      setAwaitingFirstTap(false)
+    }
+
     if (statusRef.current === "playing") {
       simRef.current.velocity = JUMP_STRENGTH
     }
@@ -104,7 +127,7 @@ export default function FlappyBirdGame() {
         e.preventDefault()
         jump()
       }
-      if (e.code === "KeyR" && statusRef.current !== "playing") {
+      if (e.code === "KeyR" && (statusRef.current === "won" || statusRef.current === "lost")) {
         e.preventDefault()
         reset()
       }
@@ -120,7 +143,6 @@ export default function FlappyBirdGame() {
     if (!ctx) return
 
     let raf = 0
-    let lastElapsedSec = -1
 
     const end = (kind: "won" | "lost") => {
       if (statusRef.current !== "playing") return
@@ -133,7 +155,7 @@ export default function FlappyBirdGame() {
       const pipeHeight = 32 + Math.floor(Math.random() * (maxTop - 32))
       const s = simRef.current
       s.pipes.push(
-        { x: WIDTH + 8, y: 0, width: PIPE_WIDTH, height: pipeHeight },
+        { x: WIDTH + 8, y: 0, width: PIPE_WIDTH, height: pipeHeight, scored: false },
         {
           x: WIDTH + 8,
           y: pipeHeight + PIPE_GAP,
@@ -160,7 +182,8 @@ export default function FlappyBirdGame() {
     const draw = () => {
       const colors = readThemeColors()
       const s = simRef.current
-      const playing = statusRef.current === "playing"
+      const status = statusRef.current
+      const ended = status === "won" || status === "lost"
 
       const sky = ctx.createLinearGradient(0, 0, 0, HEIGHT)
       sky.addColorStop(0, withAlpha(colors.brand1, 0.33))
@@ -228,7 +251,32 @@ export default function FlappyBirdGame() {
       ctx.arc(cx + 4, cy - 3, 1.2, 0, Math.PI * 2)
       ctx.fill()
 
-      if (!playing) {
+      if (status === "playing") {
+        ctx.save()
+        ctx.textAlign = "center"
+        ctx.font = "800 28px system-ui, ui-sans-serif, sans-serif"
+        ctx.fillStyle = withAlpha(colors.foreground, 0.95)
+        ctx.strokeStyle = withAlpha(colors.background, 0.85)
+        ctx.lineWidth = 4
+        const scoreText = String(s.score)
+        ctx.strokeText(scoreText, WIDTH / 2, 44)
+        ctx.fillText(scoreText, WIDTH / 2, 44)
+        ctx.restore()
+      }
+
+      if (status === "ready") {
+        ctx.save()
+        ctx.textAlign = "center"
+        ctx.font = "600 15px system-ui, ui-sans-serif, sans-serif"
+        ctx.fillStyle = withAlpha(colors.foreground, 0.92)
+        ctx.fillText("Tap or press Space to start", WIDTH / 2, HEIGHT * 0.72)
+        ctx.font = "500 12px system-ui, ui-sans-serif, sans-serif"
+        ctx.fillStyle = withAlpha(colors.muted, 0.95)
+        ctx.fillText("First tap begins the run", WIDTH / 2, HEIGHT * 0.72 + 20)
+        ctx.restore()
+      }
+
+      if (ended) {
         ctx.fillStyle = withAlpha(colors.background, 0.62)
         ctx.fillRect(0, 0, WIDTH, HEIGHT)
       }
@@ -261,9 +309,21 @@ export default function FlappyBirdGame() {
             end("lost")
           }
 
+          let pipesCleared = 0
+          for (const p of s.pipes) {
+            if (p.y === 0 && !p.scored && p.x + p.width < BIRD_SCORE_X) {
+              p.scored = true
+              pipesCleared += 1
+            }
+          }
+          if (pipesCleared > 0) {
+            s.score += pipesCleared
+            setScore(s.score)
+          }
+
           const sec = Math.floor((performance.now() - startTimeRef.current) / 1000)
-          if (sec !== lastElapsedSec) {
-            lastElapsedSec = sec
+          if (sec !== lastElapsedSecRef.current) {
+            lastElapsedSecRef.current = sec
             setElapsed(sec)
           }
           if (sec >= WIN_SECONDS) {
@@ -290,7 +350,7 @@ export default function FlappyBirdGame() {
           height={HEIGHT}
           className="relative z-[1] w-full h-auto block cursor-pointer touch-manipulation select-none"
           style={{ imageRendering: "pixelated" }}
-          aria-label="Flappy-style mini game: tap or space to flap"
+          aria-label="Mini game: first tap starts; then tap or space to flap"
           onPointerDown={(e) => {
             e.preventDefault()
             jump()
@@ -300,10 +360,16 @@ export default function FlappyBirdGame() {
 
       {!outcome && (
         <div className="mt-4 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between text-sm text-muted-foreground">
-          <span className="font-medium tabular-nums">
-            Survive {WIN_SECONDS}s — {elapsed}s
+          {awaitingFirstTap ? (
+            <span className="font-medium">Tap the game to begin</span>
+          ) : (
+            <span className="font-medium tabular-nums">
+              Score {score} · Time {elapsed}s / {WIN_SECONDS}s
+            </span>
+          )}
+          <span className="text-xs sm:text-sm">
+            {awaitingFirstTap ? "Space also starts" : "Tap / Space · R after a run"}
           </span>
-          <span className="text-xs sm:text-sm">Tap / Space · R to restart</span>
         </div>
       )}
 
@@ -316,6 +382,8 @@ export default function FlappyBirdGame() {
             Hire me now
           </h2>
           <p className="text-muted-foreground mt-2 text-sm md:text-base">
+            <span className="font-semibold text-foreground tabular-nums">Score: {score}</span>
+            <span className="mx-2 text-border">·</span>
             {outcome === "won"
               ? "You cleared the run — imagine what we could ship together."
               : "One more run? Either way, I’d love to build your next thing."}

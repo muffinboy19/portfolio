@@ -15,7 +15,7 @@ export default function GamePage() {
         </p>
         <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Neon flap</h1>
         <p className="mt-3 text-muted-foreground text-sm md:text-base leading-relaxed">
-          Tap the canvas, click, or press Space to stay airborne. Survive twelve seconds to win.
+          Tap the canvas (or press Space) once to start, then keep tapping to stay up. Survive twelve seconds to win.
         </p>
       </div>
       <FlappyBirdGame />
