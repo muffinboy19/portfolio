@@ -1,17 +1,24 @@
-import type { Metadata } from "next";
+import type { Metadata } from "next"
+import FlappyBirdGame from "@/components/flappy-bird-game"
 
 export const metadata: Metadata = {
   title: "Game",
-  description: "Coming Soon",
-};
+  description: "A quick browser mini-game — survive the pipes.",
+}
 
 export default function GamePage() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-4">
-      <h1 className="text-4xl font-bold">Game Coming Soon!</h1>
-      <p className="mt-4 text-lg text-muted-foreground">
-        We're working hard to bring you an exciting game. Please check back later!
-      </p>
-    </div>
-  );
+    <main className="min-h-[calc(100vh-4rem)] flex flex-col items-center px-4 py-12 md:py-16">
+      <div className="w-full max-w-xl text-center mb-8 md:mb-10">
+        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-muted-foreground mb-3">
+          Play a game
+        </p>
+        <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Neon flap</h1>
+        <p className="mt-3 text-muted-foreground text-sm md:text-base leading-relaxed">
+          Tap the canvas, click, or press Space to stay airborne. Survive twelve seconds to win.
+        </p>
+      </div>
+      <FlappyBirdGame />
+    </main>
+  )
 }
