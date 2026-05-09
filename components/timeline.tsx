@@ -43,7 +43,7 @@ export function Timeline({ className }: TimelineProps) {
                   {item.period ? <time className="text-sm text-muted-foreground">{item.period}</time> : null}
                 </div>
                 {item.description ? (
-                  <p className="mt-2 text-pretty text-sm md:text-base leading-relaxed text-muted-foreground">
+                  <p className="mt-2 whitespace-pre-line text-pretty text-sm md:text-base leading-relaxed text-muted-foreground">
                     {item.description}
                   </p>
                 ) : null}
