@@ -12,11 +12,11 @@ const WIDTH = COLS * CELL
 const HEIGHT = COLS * CELL
 const WIN_SECONDS = 12
 
-const GRAVITY = 0.32
-const JUMP_STRENGTH = -6.15
+const GRAVITY = 0.22
+const JUMP_STRENGTH = -5.35
 const PIPE_WIDTH = 34
 const PIPE_GAP = 118
-const PIPE_SPEED = 2.12
+const PIPE_SPEED = 1.88
 const BIRD_SIZE = CELL
 const BIRD_X = WIDTH * 0.22
 const BIRD_SCORE_X = BIRD_X + BIRD_SIZE / 2
@@ -98,9 +98,24 @@ export default function FlappyBirdGame() {
     setAwaitingFirstTap(true)
   }, [])
 
+  /** After a loss: new run immediately (R, Space, or tap) without a blank screen. */
+  const retryAfterLoss = useCallback(() => {
+    reset()
+    statusRef.current = "playing"
+    startTimeRef.current = performance.now()
+    lastElapsedSecRef.current = -1
+    setAwaitingFirstTap(false)
+    simRef.current.velocity = JUMP_STRENGTH
+  }, [reset])
+
   const jump = useCallback(() => {
     const st = statusRef.current
-    if (st === "won" || st === "lost") return
+    if (st === "won") return
+
+    if (st === "lost") {
+      retryAfterLoss()
+      return
+    }
 
     if (st === "ready") {
       statusRef.current = "playing"
@@ -115,7 +130,7 @@ export default function FlappyBirdGame() {
     if (statusRef.current === "playing") {
       simRef.current.velocity = JUMP_STRENGTH
     }
-  }, [])
+  }, [retryAfterLoss])
 
   useEffect(() => {
     reset()
@@ -127,14 +142,19 @@ export default function FlappyBirdGame() {
         e.preventDefault()
         jump()
       }
-      if (e.code === "KeyR" && (statusRef.current === "won" || statusRef.current === "lost")) {
-        e.preventDefault()
-        reset()
+      if (e.code === "KeyR") {
+        if (statusRef.current === "lost") {
+          e.preventDefault()
+          retryAfterLoss()
+        } else if (statusRef.current === "won") {
+          e.preventDefault()
+          reset()
+        }
       }
     }
     window.addEventListener("keydown", onKey)
     return () => window.removeEventListener("keydown", onKey)
-  }, [jump, reset])
+  }, [jump, reset, retryAfterLoss])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -183,7 +203,6 @@ export default function FlappyBirdGame() {
       const colors = readThemeColors()
       const s = simRef.current
       const status = statusRef.current
-      const ended = status === "won" || status === "lost"
 
       const sky = ctx.createLinearGradient(0, 0, 0, HEIGHT)
       sky.addColorStop(0, withAlpha(colors.brand1, 0.33))
@@ -251,7 +270,7 @@ export default function FlappyBirdGame() {
       ctx.arc(cx + 4, cy - 3, 1.2, 0, Math.PI * 2)
       ctx.fill()
 
-      if (status === "playing") {
+      if (status === "playing" || status === "lost") {
         ctx.save()
         ctx.textAlign = "center"
         ctx.font = "800 28px system-ui, ui-sans-serif, sans-serif"
@@ -261,6 +280,23 @@ export default function FlappyBirdGame() {
         const scoreText = String(s.score)
         ctx.strokeText(scoreText, WIDTH / 2, 44)
         ctx.fillText(scoreText, WIDTH / 2, 44)
+        ctx.restore()
+      }
+
+      if (status === "lost") {
+        ctx.save()
+        ctx.textAlign = "center"
+        ctx.font = "600 17px system-ui, ui-sans-serif, sans-serif"
+        ctx.fillStyle = withAlpha(colors.foreground, 0.95)
+        ctx.strokeStyle = withAlpha(colors.background, 0.9)
+        ctx.lineWidth = 3
+        const line1 = "Try again"
+        const line2 = "Press R or tap"
+        ctx.strokeText(line1, WIDTH / 2, HEIGHT * 0.62)
+        ctx.fillText(line1, WIDTH / 2, HEIGHT * 0.62)
+        ctx.font = "500 13px system-ui, ui-sans-serif, sans-serif"
+        ctx.strokeText(line2, WIDTH / 2, HEIGHT * 0.62 + 22)
+        ctx.fillText(line2, WIDTH / 2, HEIGHT * 0.62 + 22)
         ctx.restore()
       }
 
@@ -276,7 +312,7 @@ export default function FlappyBirdGame() {
         ctx.restore()
       }
 
-      if (ended) {
+      if (status === "won") {
         ctx.fillStyle = withAlpha(colors.background, 0.62)
         ctx.fillRect(0, 0, WIDTH, HEIGHT)
       }
@@ -350,7 +386,7 @@ export default function FlappyBirdGame() {
           height={HEIGHT}
           className="relative z-[1] w-full h-auto block cursor-pointer touch-manipulation select-none"
           style={{ imageRendering: "pixelated" }}
-          aria-label="Mini game: first tap starts; then tap or space to flap"
+          aria-label="Mini game: first tap starts; flap with tap or Space; after a loss, R or tap to retry"
           onPointerDown={(e) => {
             e.preventDefault()
             jump()
@@ -358,35 +394,41 @@ export default function FlappyBirdGame() {
         />
       </div>
 
-      {!outcome && (
+      {(!outcome || outcome === "lost") && (
         <div className="mt-4 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between text-sm text-muted-foreground">
-          {awaitingFirstTap ? (
-            <span className="font-medium">Tap the game to begin</span>
+          {outcome === "lost" ? (
+            <>
+              <span className="font-medium tabular-nums">
+                Score {score} · Run ended
+              </span>
+              <span className="text-xs sm:text-sm">Press R or tap the game to retry</span>
+            </>
+          ) : awaitingFirstTap ? (
+            <>
+              <span className="font-medium">Tap the game to begin</span>
+              <span className="text-xs sm:text-sm">Space also starts</span>
+            </>
           ) : (
-            <span className="font-medium tabular-nums">
-              Score {score} · Time {elapsed}s / {WIN_SECONDS}s
-            </span>
+            <>
+              <span className="font-medium tabular-nums">
+                Score {score} · Time {elapsed}s / {WIN_SECONDS}s
+              </span>
+              <span className="text-xs sm:text-sm">Tap / Space · R after you win</span>
+            </>
           )}
-          <span className="text-xs sm:text-sm">
-            {awaitingFirstTap ? "Space also starts" : "Tap / Space · R after a run"}
-          </span>
         </div>
       )}
 
-      {outcome && (
+      {outcome === "won" && (
         <div className="mt-5 rounded-2xl border border-border bg-gradient-to-b from-card/90 to-card/60 backdrop-blur-md p-5 md:p-7 shadow-lg">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--brand-2)] mb-2">
-            {outcome === "won" ? "You made it" : "Nice try"}
-          </p>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--brand-2)] mb-2">You made it</p>
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight bg-gradient-to-r from-[var(--brand-1)] to-[var(--brand-2)] bg-clip-text text-transparent">
             Hire me now
           </h2>
           <p className="text-muted-foreground mt-2 text-sm md:text-base">
             <span className="font-semibold text-foreground tabular-nums">Score: {score}</span>
             <span className="mx-2 text-border">·</span>
-            {outcome === "won"
-              ? "You cleared the run — imagine what we could ship together."
-              : "One more run? Either way, I’d love to build your next thing."}
+            You cleared the run — imagine what we could ship together.
           </p>
           <div className="mt-5 flex flex-wrap gap-2">
             <Button onClick={reset}>Play again</Button>
