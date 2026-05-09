@@ -25,7 +25,7 @@ export const experienceData: Experience[] = [
     "tags": ["Whisper", "Sarvam AI", "Flutter", "Dart", "REST APIs", "Kotlin Coroutines"]
   },
   {
-    "id": "exp-3",
+    "id": "exp-4",
     "title": "Mentor",
     "subtitle": "OpenCode",
     "period": "Dec 2023 – Jan 2024",
@@ -33,7 +33,7 @@ export const experienceData: Experience[] = [
     "tags": ["Open Source", "Git", "Code Review", "Mentorship"]
   },
   {
-    "id": "exp-4",
+    "id": "exp-5",
     "title": "App Wing Coordinator",
     "subtitle": "GeekHaven, IIIT Allahabad",
     "period": "2024 – Present",
